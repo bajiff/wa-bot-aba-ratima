@@ -1,0 +1,168 @@
+// ? index.js - FIXED FOR GROUP CHAT & OPTIMIZED
+import fs from 'fs';
+import qrcode from 'qrcode-terminal';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import 'dotenv/config';
+import pkg from 'whatsapp-web.js';
+const { Client, LocalAuth } = pkg;
+
+// --- 1. KONFIGURASI GEMINI AI (STRICT MODEL) ---
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+
+// Menggunakan model sesuai permintaan (Lite/Flash)
+const model = genAI.getGenerativeModel({ 
+    model: "gemini-3-flash-preview", //  DO NOT CHANGE
+    generationConfig: {
+        temperature: 0.3,       
+        maxOutputTokens: 800,   
+    }
+});
+
+// --- 2. SETUP LOGGER (DATA KUANTITATIF) ---
+const LOG_FILE = 'data-penelitian.csv';
+
+const logResearchData = (question, answer, duration) => {
+    if (!fs.existsSync(LOG_FILE)) {
+        fs.writeFileSync(LOG_FILE, 'Timestamp,Pertanyaan,Jawaban,Waktu_Proses_ms\n');
+    }
+    const cleanQ = question ? question.replace(/[\n,"]/g, ' ') : ''; 
+    const cleanA = answer ? answer.replace(/[\n,"]/g, ' ') : '';
+    const time = new Date().toISOString();
+    
+    const row = `${time},"${cleanQ}","${cleanA}",${duration}\n`;
+    fs.appendFileSync(LOG_FILE, row);
+};
+
+// --- 3. IN-MEMORY DATABASE (CACHE) ---
+let PUSKESMAS_DATA_CONTEXT = "";
+
+try {
+    console.log("📂 Membaca Database Puskesmas ke RAM...");
+    const rawData = fs.readFileSync('data-toko-aba-ratima.json', 'utf8');
+    const jsonData = JSON.parse(rawData);
+    PUSKESMAS_DATA_CONTEXT = JSON.stringify(jsonData); 
+    console.log("✅ Database Siap!");
+} catch (error) {
+    console.error("❌ FATAL: Gagal memuat database.", error);
+    process.exit(1);
+}
+
+// --- 4. SYSTEM INSTRUCTION (DO NOT CHANGE) ---
+// Sesuai original file 
+const SYSTEM_INSTRUCTION = `
+PERAN: Anda adalah "Asisten Digital Toko Aba Ratima", asisten toko kelontong yang ramah dan informatif di Suranenggala, Cirebon.
+
+TUGAS UTAMA:
+1. Sapaan Awal (Greeting):
+   "Halo 👋! Selamat datang di Layanan Informasi Toko Aba Ratima (Suranenggala).
+   Ada yang bisa saya bantu? Silakan tanya:
+   ✅ Cek Harga & Stok Barang
+   ✅ Jam Buka & Lokasi
+   ✅ Aturan Pembayaran"
+
+2. LOGIKA JAWABAN BERDASARKAN JSON (STRICT):
+
+   A. KETIKA DITANYA STOK/HARGA BARANG:
+      - Cari kecocokan nama barang di 'daftar_barang'.
+      - JIKA DITEMUKAN:
+        "📦 *[Nama Barang]*
+         📝 Varian: [Varian]
+         💰 Harga: *Rp [Harga]*
+         📊 Stok Saat Ini: [Stok] pcs"
+      - JIKA STOK 0: "Mohon maaf Kak, untuk *[Nama Barang]* stoknya sedang habis."
+      - JIKA TIDAK DITEMUKAN: "Barang tersebut tidak ada dalam daftar kami."
+
+   B. KETIKA DITANYA PEMBAYARAN:
+      - Cek 'metode_pembayaran'. Karena 'non_tunai' bernilai false, jawab:
+        "💵 Mohon maaf Kak, saat ini kami HANYA menerima pembayaran **TUNAI (CASH)** langsung di toko. Belum bisa transfer atau QRIS ya."
+
+   C. KETIKA DITANYA PENGIRIMAN/DELIVERY:
+      - Cek 'pengiriman'. Jawab:
+        "🏠 Mohon maaf, kami **tidak melayani pengiriman/delivery**. Silakan datang langsung ke toko untuk mengambil barang ya Kak."
+
+   D. KETIKA DITANYA JAM BUKA:
+      - Sebutkan jam 07.00 - 21.00 WIB.
+      - **PENTING:** Wajib sebutkan catatan istirahat: "Toko biasanya tutup sebentar pagi hari (07.00-09.00) karena Bapak sedang belanja barang ke pasar."
+
+   E. KETIKA DITANYA LOKASI:
+      - Jawab dengan Alamat dan Patokan: "Jl. Sunan Gunungjati, Desa Suranenggala Kidul. Patokannya: *Jembatan sasak gantung ngalor*."
+
+ATURAN FORMAT & GAYA BAHASA:
+1. Gunakan Bahasa Indonesia yang sopan dan santai (bisa sedikit logat akrab Cirebonan/Sunda halus jika perlu, tapi standar Indonesia lebih aman).
+2. Gunakan Emoji (📦, 💰, 🏠, ❌, ✅) untuk memperjelas poin.
+3. **PENTING:** Gunakan Enter 2x antar paragraf agar chat enak dibaca.
+4. Jangan memberikan harapan palsu (misal: "bisa diusahakan dikirim"), harus patuh pada JSON (Pick up only).
+
+BATASAN (LIMITATIONS):
+- JANGAN MENGARANG DATA. Jika user tanya "Ada Sosis Kanzler?", karena tidak ada di JSON, jawab jujur tidak ada.
+- Jika user komplain/minta retur, jawab sesuai 'kebijakan_toko': "Mohon maaf, barang yang sudah dibeli tidak dapat ditukar/dikembalikan."
+- Jika informasi sangat spesifik tidak ditemukan, arahkan ke Owner: "Untuk info lebih lanjut silakan hubungi Bapak Aba Ratima di nomor yang tertera."
+`;
+
+// --- 5. SETUP CLIENT WHATSAPP ---
+const client = new Client({
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--disable-gpu'
+        ]
+    }
+});
+
+client.on('qr', (qr) => qrcode.generate(qr, { small: true }));
+client.on('ready', () => console.log('[INFO] Bot Siap Melayani!'));
+
+// --- 6. LOGIKA PESAN UTAMA ---
+client.on('message', async msg => {
+    // Filter status broadcast
+    if (msg.body === 'status@broadcast') return;
+
+    try {
+        const chat = await msg.getChat();
+
+        // === FILTER GROUP CHAT (REVISI PENTING) ===
+        if (chat.isGroup) {
+            // Opsional: Log ke console agar kita tahu ada yang mencoba
+            console.log(`[BLOCKED] Group Chat terdeteksi dari ${msg.from}. Mengabaikan.`);
+            return; // STOP DI SINI. Jangan proses apapun.
+        }
+        // ===========================================
+
+        const startTime = Date.now();
+        console.log(`[USER] ${msg.from}: ${msg.body}`);
+
+        // Construct Prompt (Context Injection)
+        const prompt = `
+        ${SYSTEM_INSTRUCTION}
+
+        === DATA PUSKESMAS UMUM (SUMBER KEBENARAN) ===
+        ${PUSKESMAS_DATA_CONTEXT}
+        =======================================
+
+        PERTANYAAN USER: "${msg.body}"
+        JAWABAN:`;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+
+        // Reply ke user
+        await msg.reply(text);
+
+        const endTime = Date.now();
+        logResearchData(msg.body, text, endTime - startTime);
+        console.log(`[BOT] Terkirim (${endTime - startTime}ms)`);
+
+    } catch (error) {
+        console.error('[ERROR]', error);
+    }
+});
+
+client.initialize();

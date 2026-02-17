@@ -1,0 +1,20 @@
+{
+  "name": "wa-bot-aba-ratima",
+  "version": "1.0.0",
+  "description": "Chatbot untuk pelayanan informasi toko Aba Ratima",
+  "keywords": [],
+  "license": "ISC",
+  "author": "Baji Ajalah",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "dotenv": "^17.2.3",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.34.6"
+  },
+  "devDependencies": {}
+}

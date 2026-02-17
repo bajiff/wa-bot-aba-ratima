@@ -1,0 +1,28 @@
+# --- Dependencies (Folder Berat) ---
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# --- Environment Variables (RAHASIA) ---
+# Jangan pernah upload file ini karena ada API KEY!
+.env
+api-key.txt
+
+
+# --- WhatsApp Session Data (RAHASIA & BERAT) ---
+# Folder ini berisi login WA Anda. Kalau ke-upload, orang bisa bajak WA Anda.
+.wwebjs_auth/
+.wwebjs_cache/
+
+# --- System Files (Sampah OS) ---
+.DS_Store
+Thumbs.db
+
+# --- Editor/IDE Settings ---
+.vscode/
+.idea/
+
+# --- Research Data Logs (Opsional) ---
+# Jika Anda ingin file CSV hasil penelitian tidak ikut ke-upload (biar bersih)
+# Hapus baris di bawah ini jika Anda JUSTRU INGIN meng-upload data CSV-nya.
+data-penelitian.csv
