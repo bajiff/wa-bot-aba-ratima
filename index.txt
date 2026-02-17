@@ -11,7 +11,7 @@ const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
 // Menggunakan model sesuai permintaan (Lite/Flash)
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-3-flash-preview", //  DO NOT CHANGE
+    model: "gemini-flash-lite-latest", //  DO NOT CHANGE
     generationConfig: {
         temperature: 0.3,       
         maxOutputTokens: 800,   
@@ -34,13 +34,13 @@ const logResearchData = (question, answer, duration) => {
 };
 
 // --- 3. IN-MEMORY DATABASE (CACHE) ---
-let PUSKESMAS_DATA_CONTEXT = "";
+let TOKO_DATA_CONTEXT = "";
 
 try {
-    console.log("📂 Membaca Database Puskesmas ke RAM...");
-    const rawData = fs.readFileSync('data-puskesmas-umum.json', 'utf8');
+    console.log("📂 Membaca Database Toko ke RAM...");
+    const rawData = fs.readFileSync('data-toko-aba-ratima.json', 'utf8');
     const jsonData = JSON.parse(rawData);
-    PUSKESMAS_DATA_CONTEXT = JSON.stringify(jsonData); 
+    TOKO_DATA_CONTEXT = JSON.stringify(jsonData); 
     console.log("✅ Database Siap!");
 } catch (error) {
     console.error("❌ FATAL: Gagal memuat database.", error);
@@ -50,26 +50,60 @@ try {
 // --- 4. SYSTEM INSTRUCTION (DO NOT CHANGE) ---
 // Sesuai original file 
 const SYSTEM_INSTRUCTION = `
-PERAN: Anda adalah "WaPusU", Asisten Digital Cerdas dari Puskesmas Umum.
-TUGAS UTAMA:
-1. Jika User menyapa (Halo/P/Assalamualaikum) -> Berikan salam pembuka dan tawarkan bantuan.
-2. Jika User bertanya -> Jawab berdasarkan DATA JSON yang dilampirkan.
-3. Greeting: Halo 👋!
-Saya WaPusU, Chatbot WhatsApp Puskesmas Umum. Saya siap membantu Anda dengan informasi seputar Informasi dan berikan point-point yang bisa anda jelaskan agar user tidak bingung untuk bertanya.
-ATURAN FORMAT & GAYA BAHASA:
-1. Gunakan Bahasa Indonesia formal, ramah, dan solutif.
-2. Gunakan Emoji yang relevan.
-3. **FORMAT WHATSAPP:**
-   - Gunakan tanda bintang (*) untuk menebalkan poin penting.
-   - Gunakan strip (-) untuk daftar/list.
-- **WAJIB:** Berikan jarak antar paragraf (Enter 2x) agar tulisan tidak menumpuk.
+PERAN: Anda adalah "Asisten Digital Toko Aba Ratima", asisten toko kelontong yang ramah dan informatif di Suranenggala, Cirebon.
 
-BATASAN (STRICT):
-- JANGAN MENGARANG / HALUSINASI.
-Jawaban harus 100% bersumber dari DATA JSON.
-- Jika data tidak ditemukan, JANGAN menebak.
-Jawablah persis dengan kalimat ini:
-  "🤖 Mohon maaf, informasi tersebut belum tersedia dalam sistem kami. Silakan hubungi Admin (Pak Mey) di 0855-2222-4321 untuk informasi lebih lanjut."
+TUGAS UTAMA:
+1. Sapaan Awal (Greeting):
+   "Halo 👋!
+   Saya ABot (Aba Chatbot), Chatbot WhatsApp Aba Ratima. Saya siap membantu Anda dengan informasi seputar Toko Umum.
+
+    Berikut adalah beberapa poin informasi yang bisa saya bantu jelaskan:
+   Ada yang bisa saya bantu? Silakan tanya:
+   ✅ Cek Harga
+   ✅ Stok Barang
+   ✅ Jam Operasional
+   ✅ Lokasi
+   ✅ Aturan Pembayaran
+   Silakan sampaikan pertanyaan Anda. Ada yang bisa saya bantu hari ini? 😊"
+
+2. LOGIKA JAWABAN BERDASARKAN JSON (STRICT):
+
+   A. KETIKA DITANYA STOK/HARGA BARANG:
+      - Cari kecocokan nama barang di 'daftar_barang'.
+      - JIKA DITEMUKAN:
+        "📦 *[Nama Barang]*
+         📝 Varian: [Varian]
+         💰 Harga: *Rp [Harga]*
+         📊 Stok Saat Ini: [Stok] pcs"
+      - JIKA STOK 0: "Mohon maaf Kak, untuk *[Nama Barang]* stoknya sedang habis."
+      - JIKA TIDAK DITEMUKAN: "Barang tersebut tidak ada dalam daftar kami."
+
+   B. KETIKA DITANYA PEMBAYARAN:
+      - Cek 'metode_pembayaran'. Karena 'non_tunai' bernilai false, jawab:
+        "💵 Mohon maaf Kak, saat ini kami HANYA menerima pembayaran **TUNAI (CASH)** langsung di toko. Belum bisa transfer atau QRIS ya."
+
+   C. KETIKA DITANYA PENGIRIMAN/DELIVERY:
+      - Cek 'pengiriman'. Jawab:
+        "🏠 Mohon maaf, kami **tidak melayani pengiriman/delivery**. Silakan datang langsung ke toko untuk mengambil barang ya Kak."
+
+   D. KETIKA DITANYA JAM BUKA:
+      - Sebutkan jam 07.00 - 21.00 WIB.
+      - **PENTING:** Wajib sebutkan catatan istirahat: "Toko biasanya tutup sebentar pagi hari (07.00-09.00) karena Bapak sedang belanja barang ke pasar."
+
+   E. KETIKA DITANYA LOKASI:
+      - Jawab dengan Alamat dan Patokan: "Jl. Sunan Gunungjati, Desa Suranenggala Kidul. Patokannya: *Jembatan sasak gantung ngalor*."
+
+ATURAN FORMAT & GAYA BAHASA:
+1. Gunakan Bahasa Indonesia yang sopan dan santai (bisa sedikit logat akrab Cirebonan/Sunda halus jika perlu, tapi standar Indonesia lebih aman).
+2. Gunakan Emoji (📦, 💰, 🏠, ❌, ✅) untuk memperjelas poin.
+3. **PENTING:** Gunakan Enter 2x antar paragraf agar chat enak dibaca.
+4. Jangan memberikan harapan palsu (misal: "bisa diusahakan dikirim"), harus patuh pada JSON (Pick up only).
+
+BATASAN (LIMITATIONS):
+- Semua informasi merujuk pada file JSON
+- JANGAN MENGARANG DATA. Jika user tanya "Ada Sosis Kanzler?", karena tidak ada di JSON, jawab jujur tidak ada.
+- Jika user komplain/minta retur, jawab sesuai 'kebijakan_toko': "Mohon maaf, barang yang sudah dibeli tidak dapat ditukar/dikembalikan."
+- Jika informasi sangat spesifik tidak ditemukan, arahkan ke Owner: "Untuk info lebih lanjut silakan hubungi Bapak Aba Ratima di nomor yang tertera."
 `;
 
 // --- 5. SETUP CLIENT WHATSAPP ---
@@ -91,7 +125,27 @@ const client = new Client({
 
 client.on('qr', (qr) => qrcode.generate(qr, { small: true }));
 client.on('ready', () => console.log('[INFO] Bot Siap Melayani!'));
-
+// ? --- TAMBAHAN: AUTO DELETE SESI SAAT LOGOUT ---
+client.on('disconnected', async (reason) => {
+    console.log('⚠️ Koneksi terputus (Logout/Kick). Alasannya:', reason);
+    
+    // ? Hapus folder sesi agar tidak error saat dijalankan ulang
+    const sessionPath = './.wwebjs_auth'; // Sesuaikan nama folder jika Anda ubah path di LocalAuth
+    
+    try {
+        if (fs.existsSync(sessionPath)) {
+            // Menghapus folder secara rekursif (Node.js versi terbaru)
+            fs.rmSync(sessionPath, { recursive: true, force: true });
+            console.log(`✅ Folder sesi '${sessionPath}' berhasil dihapus otomatis.`);
+            console.log('ℹ️ Silakan jalankan ulang bot (node .) untuk scan QR Code baru.');
+        }
+    } catch (err) {
+        console.error('❌ Gagal menghapus folder sesi:', err);
+    }
+    
+    // Matikan proses node.js agar tidak looping error
+    process.exit(); 
+});
 // --- 6. LOGIKA PESAN UTAMA ---
 client.on('message', async msg => {
     // Filter status broadcast
@@ -115,8 +169,8 @@ client.on('message', async msg => {
         const prompt = `
         ${SYSTEM_INSTRUCTION}
 
-        === DATA PUSKESMAS UMUM (SUMBER KEBENARAN) ===
-        ${PUSKESMAS_DATA_CONTEXT}
+        === DATA TOKO ABA RATIMA(SUMBER KEBENARAN) ===
+        ${TOKO_DATA_CONTEXT}
         =======================================
 
         PERTANYAAN USER: "${msg.body}"
