@@ -43,7 +43,7 @@
       "sembako": [
         { "id": "SMB-001", "nama": "Beras Pandan Wangi", "varian": "Karung 5kg", "harga": 72000, "stok": 15 },
         { "id": "SMB-003", "nama": "Minyak Goreng Sunco", "varian": "Pouch 2 Liter", "harga": 38000, "stok": 20 },
-        { "id": "SMB-005", "nama": "Telur Ayam Negeri", "varian": "Per Kilogram", "harga": 28000, "stok": 15 },
+        { "id": "SMB-005", "nama": "Telur Ayam Negeri", "varian": "1 Kilogram", "harga": 28000, "stok": 15 },
         { "id": "SMB-006", "nama": "Gula Pasir Gulaku", "varian": "Kuning (1 kg)", "harga": 17500, "stok": 25 },
         { "id": "SMB-008", "nama": "Terigu Segitiga Biru", "varian": "Kemasan 1 kg", "harga": 14000, "stok": 20 }
       ],
@@ -54,7 +54,8 @@
       "bumbu_dapur": [
         { "id": "BMB-001", "nama": "Kecap Bango", "varian": "Pouch Kecil (Refill)", "harga": 10000, "stok": 30 },
         { "id": "BMB-002", "nama": "Saus Sambal ABC", "varian": "Botol Kecil 135ml", "harga": 8000, "stok": 25 },
-        { "id": "BMB-003", "nama": "Masako / Royco", "varian": "Sachet Ayam (Renteng)", "harga": 500, "stok": 240 },
+        { "id": "BMB-003A", "nama": "Masako Ayam", "varian": "Sachet (Renteng)", "harga": 500, "stok": 120 },
+        { "id": "BMB-003B", "nama": "Royco Ayam", "varian": "Sachet (Renteng)", "harga": 500, "stok": 120 },
         { "id": "BMB-004", "nama": "Garam Halus", "varian": "Bungkus 250gr", "harga": 3000, "stok": 40 },
         { "id": "BMB-005", "nama": "Santan Kara", "varian": "Segitiga 65ml", "harga": 3500, "stok": 35 }
       ],
@@ -66,12 +67,13 @@
         { "id": "SUS-001", "nama": "Ultra Milk UHT", "varian": "Coklat 250ml", "harga": 7500, "stok": 30 },
         { "id": "SUS-002", "nama": "Susu Bendera (Frisian Flag)", "varian": "Kental Manis Putih (Kaleng)", "harga": 12500, "stok": 20 }
       ],
-      "perlengkapan_mandi_cuci": [
+      "perlengkapan_mandi_dan_cuci": [
         { "id": "SBN-001", "nama": "Rinso Anti Noda", "varian": "Sachet (Renteng)", "harga": 1000, "stok": 200 },
         { "id": "SBN-002", "nama": "Sunlight Cuci Piring", "varian": "Pouch Kecil (90ml)", "harga": 2000, "stok": 60 },
         { "id": "SBN-003", "nama": "Sabun Mandi Lifebuoy", "varian": "Batang (Merah)", "harga": 4500, "stok": 40 },
-        { "id": "SBN-004", "nama": "Shampoo Lifebuoy / Clear", "varian": "Sachet (Renteng)", "harga": 1000, "stok": 150 },
-        { "id": "SBN-005", "nama": "Pepsodent", "varian": "Tube Sedang (120gr)", "harga": 12000, "stok": 25 }
+        { "id": "SBN-004", "nama": "Shampoo Lifebuoy", "varian": "Sachet (Renteng)", "harga": 1000, "stok": 150 },
+        { "id": "SBN-005", "nama": "Shampoo Clear", "varian": "Sachet (Renteng)", "harga": 1000, "stok": 75 },
+        { "id": "SBN-006", "nama": "Pepsodent", "varian": "Tube Sedang (120gr)", "harga": 12000, "stok": 25 }
       ],
       "rokok": [
         { "id": "ROK-003", "nama": "Djarum Super", "varian": "12 Batang", "harga": 24000, "stok": 45 },
@@ -82,10 +84,12 @@
         { "id": "GAS-002", "nama": "Aqua Galon", "varian": "Isi Ulang Asli", "harga": 20000, "stok": 15 }
       ],
       "jajanan_snack": [
-        { "id": "SNK-001", "nama": "Beng-Beng", "varian": "Original", "harga": 2500, "stok": 60 }
+        { "id": "SNK-001", "nama": "Beng-Beng", "varian": "Original", "harga": 3000, "stok": 50 },
+        { "id": "SNK-002", "nama": "Nabati", "varian": "Original", "harga": 2500, "stok": 50 }
       ],
       "obat_kesehatan": [
-        { "id": "MED-001", "nama": "Tolak Angin", "varian": "Cair (Sachet)", "harga": 5000, "stok": 40 }
+        { "id": "MED-001", "nama": "Tolak Angin", "varian": "Cair (Sachet)", "harga": 5000, "stok": 40 },
+        { "id": "MED-002", "nama": "Komix", "varian": "Cair (Sachet)", "harga": 3000, "stok": 40 }
       ]
     }
   }
