@@ -34,9 +34,8 @@ Sebelum memulai, pastikan komputer Anda sudah terinstal:
 Buka terminal/CMD, lalu jalankan:
 
 ```bash
-git clone https://github.com/username-anda/baji-wa-bot-akademik.git
-cd metopen-wa-bot-aba ratima-umum
-
+git clone https://github.com/bajiff/wa-bot-aba-ratima.git
+cd wa-bot-aba-ratima
 ```
 
 ### 2. Install Dependencies
@@ -45,7 +44,6 @@ Install semua library yang dibutuhkan (whatsapp-web.js, google-generative-ai, dl
 
 ```bash
 npm install
-
 ```
 
 ### 3. Konfigurasi API Key
