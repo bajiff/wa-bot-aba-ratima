@@ -7,7 +7,6 @@ yarn-error.log
 # Jangan pernah upload file ini karena ada API KEY!
 .env
 api-key.txt
-api-key-baji.txt
 
 
 # --- WhatsApp Session Data (RAHASIA & BERAT) ---
