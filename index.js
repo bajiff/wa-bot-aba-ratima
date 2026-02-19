@@ -1,6 +1,6 @@
 // ? index.js
 import fs from 'fs';
-import { appendFile } from 'fs/promises'; // Gunakan Async untuk log agar tidak memblokir antrean pesan
+import { appendFile } from 'fs/promises'; 
 import qrcode from 'qrcode-terminal';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import 'dotenv/config';
@@ -9,7 +9,7 @@ const { Client, LocalAuth } = pkg;
 
 // ? SETUP LOGGER
 const LOG_FILE = 'data-penelitian.csv';
-// Kode untuk membuat header kalau belum di buat headernya
+// ? Kode untuk membuat header kalau belum di buat headernya
 if (!fs.existsSync(LOG_FILE)) {
     fs.writeFileSync(LOG_FILE, 'Timestamp,Pertanyaan,Jawaban,Waktu_Proses_ms,Ukuran_Pesan_User_KB,Ukuran_Balasan_KB\n');
 };
