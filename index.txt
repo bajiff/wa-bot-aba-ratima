@@ -1,194 +1,158 @@
-// ? index.js - FIXED FOR GROUP CHAT & OPTIMIZED
+// ? index.js
 import fs from 'fs';
+import { appendFile } from 'fs/promises'; 
 import qrcode from 'qrcode-terminal';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import 'dotenv/config';
 import pkg from 'whatsapp-web.js';
 const { Client, LocalAuth } = pkg;
 
-// --- 1. KONFIGURASI GEMINI AI (STRICT MODEL) ---
-const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-
-// Menggunakan model sesuai permintaan (Lite/Flash)
-const model = genAI.getGenerativeModel({ 
-    model: "gemini-flash-lite-latest", //  DO NOT CHANGE
-    generationConfig: {
-        temperature: 0.3,       
-        maxOutputTokens: 800,   
-    }
-});
-
-// --- 2. SETUP LOGGER (DATA KUANTITATIF) ---
+// ? SETUP LOGGER
 const LOG_FILE = 'data-penelitian.csv';
+// ? Kode untuk membuat header kalau belum di buat headernya
+if (!fs.existsSync(LOG_FILE)) {
+    fs.writeFileSync(LOG_FILE, 'Timestamp,Pertanyaan,Jawaban,Waktu_Proses_ms,Ukuran_Pesan_User_KB,Ukuran_Balasan_KB\n');
+};
 
-const logResearchData = (question, answer, duration) => {
-    if (!fs.existsSync(LOG_FILE)) {
-        fs.writeFileSync(LOG_FILE, 'Timestamp,Pertanyaan,Jawaban,Waktu_Proses_ms\n');
-    }
+const logResearchDataAsync = async (question, answer, duration) => {
+    const kbUser = (Buffer.byteLength(question || '', 'utf8') / 1024).toFixed(3);
+    const kbBot = (Buffer.byteLength(answer || '', 'utf8') / 1024).toFixed(3);
     const cleanQ = question ? question.replace(/[\n,"]/g, ' ') : ''; 
     const cleanA = answer ? answer.replace(/[\n,"]/g, ' ') : '';
     const time = new Date().toISOString();
     
-    const row = `${time},"${cleanQ}","${cleanA}",${duration}\n`;
-    fs.appendFileSync(LOG_FILE, row);
+    const row = `${time},"${cleanQ}","${cleanA}",${duration},${kbUser},${kbBot}\n`;
+    await appendFile(LOG_FILE, row);
 };
 
-// --- 3. IN-MEMORY DATABASE (CACHE) ---
-let TOKO_DATA_CONTEXT = "";
-
+// IN-MEMORY JSON 
+let TOKO_DATA_CONTEXT = "{}";
 try {
     console.log("📂 Membaca Database Toko ke RAM...");
-    const rawData = fs.readFileSync('data-toko-aba-ratima.json', 'utf8');
-    const jsonData = JSON.parse(rawData);
-    TOKO_DATA_CONTEXT = JSON.stringify(jsonData); 
-    console.log("✅ Database Siap!");
+    if(fs.existsSync('data-toko-aba-ratima.json')) {
+        const rawData = fs.readFileSync('data-toko-aba-ratima.json', 'utf8');
+        TOKO_DATA_CONTEXT = JSON.stringify(JSON.parse(rawData)); 
+        console.log("✅ Database Siap!");
+    } else {
+        console.warn("⚠️ File JSON tidak ditemukan!");
+    }
 } catch (error) {
-    console.error("❌ FATAL: Gagal memuat database.", error);
+    console.error("❌ Gagal memuat database:", error.message);
     process.exit(1);
 }
 
-// --- 4. SYSTEM INSTRUCTION (DO NOT CHANGE) ---
-// Sesuai original file 
+// ? 3. KONFIGURASI GEMINI AI & SYSTEM INSTRUCTION
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+
+// ? 4. SYSTEM INSTRUCTION 
 const SYSTEM_INSTRUCTION = `
-PERAN: Anda adalah "Asisten Digital Toko Aba Ratima", asisten toko kelontong yang ramah dan informatif di Suranenggala, Cirebon.
+PERAN: Anda adalah "ABot", Asisten Virtual Toko Aba Ratima.
 
+ATURAN LOGIKA BALASAN (SANGAT PENTING):
+PERAN: Anda adalah "ABot", Aba Chatbot.
 TUGAS UTAMA:
-1. Sapaan Awal (Greeting):
-   "Halo 👋!
-   Saya ABot (Aba Chatbot), Chatbot WhatsApp Aba Ratima. Saya siap membantu Anda dengan informasi seputar Toko Umum.
+1. Jika User menyapa (Halo/P/Assalamualaikum) -> Berikan salam pembuka dan tawarkan bantuan.
 
-    Berikut adalah beberapa poin informasi yang bisa saya bantu jelaskan:
-   Ada yang bisa saya bantu? Silakan tanya:
-   ✅ Cek Harga
-   ✅ Stok Barang
-   ✅ Jam Operasional
-   ✅ Lokasi
-   ✅ Aturan Pembayaran
-   Silakan sampaikan pertanyaan Anda. Ada yang bisa saya bantu hari ini? 😊"
+2. Jika User bertanya -> Jawab berdasarkan DATA JSON yang dilampirkan.
 
-2. LOGIKA JAWABAN BERDASARKAN JSON (STRICT):
+3. Greeting atau awal pecakapan: Halo 👋!
+Saya ABot, Chatbot WhatsApp Toko Aba Ratima. Saya siap membantu Anda dengan informasi seputar 
+- Informasi toko 📍
+- Stok dan Harga Barang 🛒
+- Jam Operasional Toko ⏰
+- Metode Pembayaran 💳
+- Kebijakan Toko (Retur/Kasbon) 📝
 
-   A. KETIKA DITANYA STOK/HARGA BARANG:
-      - Cari kecocokan nama barang di 'daftar_barang'.
-      - JIKA DITEMUKAN:
-        "📦 *[Nama Barang]*
-         📝 Varian: [Varian]
-         💰 Harga: *Rp [Harga]*
-         📊 Stok Saat Ini: [Stok] pcs"
-      - JIKA STOK 0: "Mohon maaf Kak, untuk *[Nama Barang]* stoknya sedang habis."
-      - JIKA TIDAK DITEMUKAN: "Barang tersebut tidak ada dalam daftar kami."
 
-   B. KETIKA DITANYA PEMBAYARAN:
-      - Cek 'metode_pembayaran'. Karena 'non_tunai' bernilai false, jawab:
-        "💵 Mohon maaf Kak, saat ini kami HANYA menerima pembayaran **TUNAI (CASH)** langsung di toko. Belum bisa transfer atau QRIS ya."
-
-   C. KETIKA DITANYA PENGIRIMAN/DELIVERY:
-      - Cek 'pengiriman'. Jawab:
-        "🏠 Mohon maaf, kami **tidak melayani pengiriman/delivery**. Silakan datang langsung ke toko untuk mengambil barang ya Kak."
-
-   D. KETIKA DITANYA JAM BUKA:
-      - Sebutkan jam 07.00 - 21.00 WIB.
-      - **PENTING:** Wajib sebutkan catatan istirahat: "Toko biasanya tutup sebentar pagi hari (07.00-09.00) karena Bapak sedang belanja barang ke pasar."
-
-   E. KETIKA DITANYA LOKASI:
-      - Jawab dengan Alamat dan Patokan: "Jl. Sunan Gunungjati, Desa Suranenggala Kidul. Patokannya: *Jembatan sasak gantung ngalor*."
+4. JIKA user BERTANYA atau MEMESAN (Contoh: "beli rokok", "caranya gimana", "stok beras"): 
+LANGSUNG jawab inti pertanyaannya berdasarkan JSON. 
+DILARANG KERAS mengulang sapaan awal (Halo saya ABot...) atau menyebutkan ulang daftar menu/bantuan. Langsung berikan harga, stok, atau cara belinya.
 
 ATURAN FORMAT & GAYA BAHASA:
-1. Gunakan Bahasa Indonesia yang sopan dan santai (bisa sedikit logat akrab Cirebonan/Sunda halus jika perlu, tapi standar Indonesia lebih aman).
-2. Gunakan Emoji (📦, 💰, 🏠, ❌, ✅) untuk memperjelas poin.
-3. **PENTING:** Gunakan Enter 2x antar paragraf agar chat enak dibaca.
-4. Jangan memberikan harapan palsu (misal: "bisa diusahakan dikirim"), harus patuh pada JSON (Pick up only).
+- Komunikasi harus efisien, ramah, solutif, dan langsung ke intinya (To the point).
+- Gunakan emoji secukupnya agar tidak kaku.
+- **FORMAT WHATSAPP:** Gunakan (*) untuk menebalkan kata kunci (seperti harga/nama barang), dan (-) untuk daftar. Berikan jarak antar paragraf (Enter) agar rapi.
 
-BATASAN (LIMITATIONS):
-- Semua informasi merujuk pada file JSON
-- JANGAN MENGARANG DATA. Jika user tanya "Ada Sosis Kanzler?", karena tidak ada di JSON, jawab jujur tidak ada.
-- Jika user komplain/minta retur, jawab sesuai 'kebijakan_toko': "Mohon maaf, barang yang sudah dibeli tidak dapat ditukar/dikembalikan."
-- Jika informasi sangat spesifik tidak ditemukan, arahkan ke Owner: "Untuk info lebih lanjut silakan hubungi Bapak Aba Ratima di nomor yang tertera."
+ATURAN PENANGANAN BARANG KOSONG / VARIAN LAIN (NEW):
+- JIKA user mencari barang yang TIDAK ADA atau menanyakan VARIAN LAIN yang tidak terdaftar di JSON, jawablah dengan bahasa natural bahwa barang tersebut tidak dijual/kosong. 
+- Contoh: "Mohon maaf Kak, untuk saat ini kami hanya menyediakan [Sebutkan barang yang ada di JSON] saja." atau "Wah maaf Kak, untuk [Nama Barang] kebetulan kita belum jual nih."
+
+BATASAN KETAT (STRICT):
+- JANGAN MENGARANG/HALUSINASI. Info harga, stok, dan prosedur WAJIB 100% ditarik dari DATA JSON.
+- JIKA user bertanya hal di luar konteks toko (misal: nanya cuaca, politik, atau info admin yang tidak ada di JSON), BARU gunakan template ini persis:
+  "🤖 Mohon maaf, informasi tersebut belum tersedia dalam sistem kami. Silakan hubungi Admin Toko Aba di 0811-2222-3333."
+=== DATA TOKO (SUMBER DATA) ===
+${TOKO_DATA_CONTEXT}
 `;
 
-// --- 5. SETUP CLIENT WHATSAPP ---
+const model = genAI.getGenerativeModel({ 
+    model: "gemini-2.5-flash", 
+    systemInstruction: SYSTEM_INSTRUCTION,
+    generationConfig: { temperature: 0.3, maxOutputTokens: 1024 },
+    safetySettings: [
+        { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+        { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
+        { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
+        { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+    ]
+});
+
+// ? 5. SESSION MEMORY AGAR BOT TIDAK AMNESIA
+const chatSessions = new Map(); 
+
+// ? 6. SETUP CLIENT WHATSAPP 
 const client = new Client({
     authStrategy: new LocalAuth(),
-    puppeteer: {
-        headless: true,
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-accelerated-2d-canvas',
-            '--no-first-run',
-            '--no-zygote',
-            '--disable-gpu'
-        ]
-    }
+    puppeteer: { headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'] }
 });
 
 client.on('qr', (qr) => qrcode.generate(qr, { small: true }));
 client.on('ready', () => console.log('[INFO] Bot Siap Melayani!'));
-// ? --- TAMBAHAN: AUTO DELETE SESI SAAT LOGOUT ---
+
 client.on('disconnected', async (reason) => {
-    console.log('⚠️ Koneksi terputus (Logout/Kick). Alasannya:', reason);
-    
-    // ? Hapus folder sesi agar tidak error saat dijalankan ulang
-    const sessionPath = './.wwebjs_auth'; // Sesuaikan nama folder jika Anda ubah path di LocalAuth
-    
-    try {
-        if (fs.existsSync(sessionPath)) {
-            // Menghapus folder secara rekursif (Node.js versi terbaru)
-            fs.rmSync(sessionPath, { recursive: true, force: true });
-            console.log(`✅ Folder sesi '${sessionPath}' berhasil dihapus otomatis.`);
-            console.log('ℹ️ Silakan jalankan ulang bot (node .) untuk scan QR Code baru.');
-        }
-    } catch (err) {
-        console.error('❌ Gagal menghapus folder sesi:', err);
-    }
-    
-    // Matikan proses node.js agar tidak looping error
+    console.log('⚠️ Koneksi terputus:', reason);
+    const sessionPath = './.wwebjs_auth';
+    if (fs.existsSync(sessionPath)) fs.rmSync(sessionPath, { recursive: true, force: true });
     process.exit(); 
 });
-// --- 6. LOGIKA PESAN UTAMA ---
+
+// ? 7. LOGIKA PESAN
 client.on('message', async msg => {
-    // Filter status broadcast
     if (msg.body === 'status@broadcast') return;
 
+    // ? ✅ Pengecekan Grup Tanpa Membebani Server WA
+    if (msg.from.includes('@g.us')) return;
+
     try {
-        const chat = await msg.getChat();
-
-        // === FILTER GROUP CHAT (REVISI PENTING) ===
-        if (chat.isGroup) {
-            // Opsional: Log ke console agar kita tahu ada yang mencoba
-            console.log(`[BLOCKED] Group Chat terdeteksi dari ${msg.from}. Mengabaikan.`);
-            return; // STOP DI SINI. Jangan proses apapun.
-        }
-        // ===========================================
-
         const startTime = Date.now();
         console.log(`[USER] ${msg.from}: ${msg.body}`);
 
-        // Construct Prompt (Context Injection)
-        const prompt = `
-        ${SYSTEM_INSTRUCTION}
+        // ✅ Buat atau Ambil Sesi Obrolan untuk User Ini
+        if (!chatSessions.has(msg.from)) {
+            // Inisialisasi chat baru dengan memori kosong (System Instruction otomatis ikut dari model)
+            chatSessions.set(msg.from, model.startChat({ history: [] }));
+        }
+        
+        const chat = chatSessions.get(msg.from);
 
-        === DATA TOKO ABA RATIMA(SUMBER KEBENARAN) ===
-        ${TOKO_DATA_CONTEXT}
-        =======================================
+        // ✅ Kirim pesan murni tanpa menempelkan prompt JSON lagi
+        const result = await chat.sendMessage(msg.body);
+        let text = "";
+        
+        try {
+             text = result.response.text();
+        } catch (e) {
+             text = "🤖 Mohon maaf, saya tidak bisa memproses pertanyaan tersebut karena alasan keamanan sistem.";
+        }
 
-        PERTANYAAN USER: "${msg.body}"
-        JAWABAN:`;
-
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-
-        // Reply ke user
         await msg.reply(text);
 
         const endTime = Date.now();
-        logResearchData(msg.body, text, endTime - startTime);
-        console.log(`[BOT] Terkirim (${endTime - startTime}ms)`);
+        logResearchDataAsync(msg.body, text, endTime - startTime);
+        console.log(`[BOT] Terkirim ke ${msg.from} (${endTime - startTime}ms)`);
 
     } catch (error) {
-        console.error('[ERROR]', error);
+        console.error('[ERROR SYSTEM]', error);
     }
 });
 

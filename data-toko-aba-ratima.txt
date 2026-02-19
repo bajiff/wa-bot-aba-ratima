@@ -1,116 +1,75 @@
 {
-  "identitas_puskesmas": {
-    "nama": "UPTD Puskesmas Baji Ajalah",
-    "kode_puskesmas": "P3201010",
-    "kategori": "Puskesmas Rawat Inap & PONED",
-    "akreditasi": "Paripurna (2025)",
-    "alamat": "Jl. Desa Sehat No. 10, Kecamatan Baji Ajalah, Jawa Barat",
-    "kepala_puskesmas": "dr. Hj. Siti Aminah, M.K.M",
-    "wilayah_kerja": ["Kelurahan Baji Ajalah", "Desa Sukamaju", "Desa Harapan Jaya"],
-    "moto": "Sehatmu, Prioritas Kami"
-  },
-  "statistik_layanan": {
-    "total_kunjungan_harian": 150,
-    "kapasitas_rawat_inap": {
-      "total_bed": 15,
-      "ruang_bersalin": 4,
-      "ruang_nifas": 6,
-      "ruang_perawatan_umum": 5
+  "profil_toko": {
+    "nama": "Toko Aba Ratima",
+    "pemilik": "Aba Ratima",
+    "deskripsi": "Toko kelontong terlengkap dan termurah di lingkungan warga.",
+    "alamat": {
+      "jalan": "Jl. Sunan Gunungjati No. XX, RT XX/RW XX",
+      "desa": "Suranenggala Kidul",
+      "kecamatan": "Suranenggala",
+      "kabupaten": "Cirebon",
+      "provinsi": "Jawa Barat",
+      "patokan_lokasi": "Depan Masjid Al-Ikhlas, samping tukang cukur Asgar.",
+      "link_maps": "https://maps.google.com/?q=Toko_Aba_Ratima"
     },
-    "sumber_daya_manusia": {
-      "dokter_umum": 5,
-      "dokter_gigi": 2,
-      "perawat": 12,
-      "bidan": 20,
-      "tenaga_farmasi": 3
-    },
-    "jumlah_posyandu_binaan": 18
-  },
-  "jadwal_pelayanan": {
-    "pendaftaran_loket": {
-      "senin_kamis": "07.30 - 11.00 WIB",
-      "jumat": "07.30 - 10.00 WIB",
-      "sabtu": "07.30 - 10.30 WIB"
-    },
-    "ugd_dan_persalinan": "24 Jam (Setiap Hari)",
-    "jadwal_khusus": {
-      "imunisasi_bayi": "Setiap Hari Rabu (08.00 - 11.00)",
-      "imunisasi_catin": "Setiap Hari Selasa & Kamis",
-      "prolanis_senam": "Jumat Minggu ke-1 & ke-3 (07.00 - Selesai)"
+    "kontak": {
+      "whatsapp_aba_ratima": "0812-XXXX-XXXX",
+      "telepon": "123-XXXXXXX"
     }
   },
-  "alur_pendaftaran": {
-    "syarat_dokumen": {
-      "pasien_baru": [
-        "KTP / KK (Asli & Fotokopi)",
-        "Kartu KIS / BPJS (Jika ada)"
+  "jam_operasional": {
+    "status_buka": "Buka",
+    "jadwal": {
+      "setiap_hari": "07.00 - 21.00 WIB",
+      "hari_libur_nasional": "Tetap Buka (Kecuali Idul Fitri-Adha)"
+    },
+    "catatan_istirahat": "Tutup sebentar dikarenakan sedang berbelanja ke pasar sekitar jam (07.00-09.00 WIB)"
+  },
+  "metode_pembayaran": {
+    "tunai": true,
+    "non_tunai": false
+  },
+  "pengiriman":{
+    "pengiriman_dari_toko": "Tidak melayani pengiriman ke alamat eksternal.",
+    "layanan_pengiriman": "Toko hanya melayani pengambilan barang di lokasi toko."
+  },
+  "kebijakan_toko": {
+    "retur_barang": "Mohon maaf, tidak menerima retur",
+    "kasbon": "Mohon maaf, tidak melayani kasbon/hutang."
+  },
+  "data_inventaris": {
+    "update_terakhir": "2025-02-17 07:00 WIB",
+    "kategori_barang": {
+      "sembako": [
+        { "id": "SMB-008", "nama": "Terigu Segitiga Biru", "varian": "Kemasan 1 kg", "harga": 14000, "stok": 20 }
       ],
-      "pasien_lama": [
-        "Kartu Berobat Puskesmas",
-        "Kartu KIS / BPJS"
+      "mie_instan_makanan": [
+        { "id": "MIE-004", "nama": "Mie Sedaap Goreng", "varian": "Original (Kriuk)", "harga": 3500, "stok": 90 }
+      ],
+      "bumbu_dapur": [
+        { "id": "BMB-005", "nama": "Santan Kara", "varian": "Segitiga 65ml", "harga": 3500, "stok": 35 }
+      ],
+      "minuman_dan_susu": [
+        { "id": "SUS-002", "nama": "Susu Bendera (Frisian Flag)", "varian": "Kental Manis Putih (Kaleng)", "harga": 12500, "stok": 20 }
+      ],
+      "perlengkapan_mandi_dan_cuci": [
+        { "id": "SBN-001", "nama": "Sabun Detol", "varian": "Cair (120gr)", "harga": 15000, "stok": 25 },
+        { "id": "SBN-002", "nama": "Sabun Lifebuoy", "varian": "Batangan (120gr)", "harga": 5000, "stok": 25 },
+        { "id": "SBN-006", "nama": "Pepsodent", "varian": "Tube Sedang (120gr)", "harga": 12000, "stok": 25 }
+      ],
+      "rokok": [
+        { "id": "ROK-005", "nama": "Signature", "varian": "12 Batang satu bungkus", "harga": 26999, "stok": 25 }
+      ],
+      "gas_dan_galon": [
+        { "id": "GAS-001", "nama": "Gas LPG 3kg", "varian": "Tabung Melon (Isi Ulang)", "harga": 22000, "stok": 10 }
+      ],
+      "jajanan_snack": [
+        { "id": "SNK-001", "nama": "Beng-Beng", "varian": "Original", "harga": 3000, "stok": 50 }
+      ],
+      "obat_kesehatan": [
+        { "id": "MED-001", "nama": "Tolak Angin", "varian": "Cair (Sachet)", "harga": 5000, "stok": 40 },
+        { "id": "MED-002", "nama": "Komix", "varian": "Cair (Sachet)", "harga": 3000, "stok": 40 }
       ]
-    },
-    "biaya_retribusi": {
-      "warga_ktp_setempat": "GRATIS",
-      "pasien_umum_luar_wilayah": "Rp 15.000",
-      "pasien_bpjs_kis": "GRATIS",
-      "surat_keterangan_sehat": "Rp 10.000"
-    },
-    "sistem_rujukan": [
-      "1. Periksa di Poli Puskesmas",
-      "2. Dokter memberikan indikasi medis",
-      "3. Input data ke P-Care BPJS",
-      "4. Pasien menerima Surat Rujukan ke RS Tipe C/D"
-    ]
-  },
-  "daftar_poli_layanan": {
-    "poli_umum": {
-      "nama": "Balai Pengobatan Umum",
-      "tindakan": ["Periksa Kesehatan", "Surat Sakit", "Pengobatan Dasar"],
-      "ruang": "R.01"
-    },
-    "poli_gigi": {
-      "nama": "Poli Kesehatan Gigi & Mulut",
-      "tindakan": ["Cabut Gigi Susu", "Tambal Sementara", "Pembersihan Karang Gigi (Scaling Manual)"],
-      "ruang": "R.02"
-    },
-    "kia_kb": {
-      "nama": "Kesehatan Ibu & Anak / KB",
-      "tindakan": ["Periksa Kehamilan (ANC)", "Suntik KB", "Imunisasi", "Tindik Bayi"],
-      "ruang": "R.03"
-    },
-    "mtbs": {
-      "nama": "Manajemen Terpadu Balita Sakit",
-      "target": "Anak Usia 0-5 Tahun",
-      "ruang": "R.04"
-    },
-    "poli_tb_paru": {
-      "nama": "Poli TB Paru (DOTS)",
-      "jadwal": "Senin & Kamis (Khusus)",
-      "ruang": "R. Isolasi"
     }
-  },
-  "program_unggulan": [
-    {
-      "nama": "Puskesmas Keliling (PUSLING)",
-      "deskripsi": "Layanan kesehatan jemput bola ke desa terpencil",
-      "jadwal": "Selasa & Kamis"
-    },
-    {
-      "nama": "Kunjungan Rumah (Home Care)",
-      "deskripsi": "Perawatan lansia/pasien stroke di rumah oleh perawat desa",
-      "syarat": "Lapor ke Bidan Desa setempat"
-    },
-    {
-      "nama": "Jumantik (Juru Pemantau Jentik)",
-      "deskripsi": "Pencegahan DBD setiap hari Jumat pagi"
-    }
-  ],
-  "kontak_penting": {
-    "pendaftaran_wa": "0857-1234-5678 (Chat Only)",
-    "ugd_24jam": "022-777-8888",
-    "bidan_desa_sukamaju": "Bidan Ayu (0812-xxxx-xxxx)",
-    "bidan_desa_harapan": "Bidan Ratna (0813-xxxx-xxxx)",
-    "pengaduan": "kotak_saran@puskesmas-bajiajalah.go.id"
   }
 }
