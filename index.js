@@ -118,10 +118,15 @@ client.on('disconnected', async (reason) => {
 
 // ? 7. LOGIKA PESAN
 client.on('message', async msg => {
-    if (msg.body === 'status@broadcast') return;
+    // --- PERBAIKAN DI SINI ---
+    // 1. Abaikan jika pesan berasal dari Status/Story WhatsApp
+    if (msg.from === 'status@broadcast') return;
 
-    // ? ✅ Pengecekan Grup Tanpa Membebani Server WA
-    if (msg.from.includes('@g.us')) return;
+    // 2. Abaikan jika pesan berasal dari Grup
+    if (msg.from.endsWith('@g.us')) return;
+    
+    // Tambahan: Abaikan jika pesan kosong (kadang status mengirim pesan kosong)
+    if (!msg.body) return;
 
     try {
         const startTime = Date.now();
