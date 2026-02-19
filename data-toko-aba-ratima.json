@@ -53,6 +53,8 @@
         { "id": "SUS-002", "nama": "Susu Bendera (Frisian Flag)", "varian": "Kental Manis Putih (Kaleng)", "harga": 12500, "stok": 20 }
       ],
       "perlengkapan_mandi_dan_cuci": [
+        { "id": "SBN-001", "nama": "Sabun Detol", "varian": "Cair (120gr)", "harga": 15000, "stok": 25 },
+        { "id": "SBN-002", "nama": "Sabun Lifebuoy", "varian": "Batangan (120gr)", "harga": 5000, "stok": 25 },
         { "id": "SBN-006", "nama": "Pepsodent", "varian": "Tube Sedang (120gr)", "harga": 12000, "stok": 25 }
       ],
       "rokok": [

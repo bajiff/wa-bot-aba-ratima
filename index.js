@@ -1,4 +1,4 @@
-// ? index.js - RE-OPTIMIZED BY PROMPT ENGINEER
+// ? index.js
 import fs from 'fs';
 import { appendFile } from 'fs/promises'; // Gunakan Async untuk log agar tidak memblokir antrean pesan
 import qrcode from 'qrcode-terminal';
@@ -7,12 +7,12 @@ import 'dotenv/config';
 import pkg from 'whatsapp-web.js';
 const { Client, LocalAuth } = pkg;
 
-// --- 1. SETUP LOGGER (ASYNC) ---
+// ? SETUP LOGGER
 const LOG_FILE = 'data-penelitian.csv';
-// Buat header jika file belum ada
+// Kode untuk membuat header kalau belum di buat headernya
 if (!fs.existsSync(LOG_FILE)) {
     fs.writeFileSync(LOG_FILE, 'Timestamp,Pertanyaan,Jawaban,Waktu_Proses_ms,Ukuran_Pesan_User_KB,Ukuran_Balasan_KB\n');
-}
+};
 
 const logResearchDataAsync = async (question, answer, duration) => {
     const kbUser = (Buffer.byteLength(question || '', 'utf8') / 1024).toFixed(3);
@@ -22,10 +22,10 @@ const logResearchDataAsync = async (question, answer, duration) => {
     const time = new Date().toISOString();
     
     const row = `${time},"${cleanQ}","${cleanA}",${duration},${kbUser},${kbBot}\n`;
-    await appendFile(LOG_FILE, row); // Non-blocking I/O
+    await appendFile(LOG_FILE, row);
 };
 
-// --- 2. IN-MEMORY DATABASE ---
+// IN-MEMORY JSON 
 let TOKO_DATA_CONTEXT = "{}";
 try {
     console.log("📂 Membaca Database Toko ke RAM...");
@@ -41,9 +41,10 @@ try {
     process.exit(1);
 }
 
-// --- 3. KONFIGURASI GEMINI AI & SYSTEM INSTRUCTION ---
+// ? 3. KONFIGURASI GEMINI AI & SYSTEM INSTRUCTION
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-// --- 4. SYSTEM INSTRUCTION (VERSI NATURAL & LUWES) ---
+
+// ? 4. SYSTEM INSTRUCTION 
 const SYSTEM_INSTRUCTION = `
 PERAN: Anda adalah "ABot", Asisten Virtual Toko Aba Ratima.
 
@@ -54,8 +55,14 @@ TUGAS UTAMA:
 
 2. Jika User bertanya -> Jawab berdasarkan DATA JSON yang dilampirkan.
 
-3. Greeting: Halo 👋!
-Saya ABot, Chatbot WhatsApp Toko Aba Ratima. Saya siap membantu Anda dengan informasi seputar Informasi dan berikan point-point yang bisa anda jelaskan agar user tidak bingung untuk bertanya.
+3. Greeting atau awal pecakapan: Halo 👋!
+Saya ABot, Chatbot WhatsApp Toko Aba Ratima. Saya siap membantu Anda dengan informasi seputar 
+- Informasi toko 📍
+- Stok dan Harga Barang 🛒
+- Jam Operasional Toko ⏰
+- Metode Pembayaran 💳
+- Kebijakan Toko (Retur/Kasbon) 📝
+
 
 4. JIKA user BERTANYA atau MEMESAN (Contoh: "beli rokok", "caranya gimana", "stok beras"): 
 LANGSUNG jawab inti pertanyaannya berdasarkan JSON. 
@@ -77,9 +84,9 @@ BATASAN KETAT (STRICT):
 === DATA TOKO (SUMBER DATA) ===
 ${TOKO_DATA_CONTEXT}
 `;
-// Gunakan parameter systemInstruction bawaan SDK
+
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.5-flash", // Hapus suffix "-lite" jika error, gunakan base model
+    model: "gemini-2.5-flash", 
     systemInstruction: SYSTEM_INSTRUCTION,
     generationConfig: { temperature: 0.3, maxOutputTokens: 1024 },
     safetySettings: [
@@ -90,10 +97,10 @@ const model = genAI.getGenerativeModel({
     ]
 });
 
-// --- 4. SESSION MEMORY (AGAR BOT TIDAK AMNESIA) ---
+// ? 5. SESSION MEMORY AGAR BOT TIDAK AMNESIA
 const chatSessions = new Map(); 
 
-// --- 5. SETUP CLIENT WHATSAPP ---
+// ? 6. SETUP CLIENT WHATSAPP 
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: { headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'] }
@@ -109,11 +116,11 @@ client.on('disconnected', async (reason) => {
     process.exit(); 
 });
 
-// --- 6. LOGIKA PESAN ---
+// ? 7. LOGIKA PESAN
 client.on('message', async msg => {
     if (msg.body === 'status@broadcast') return;
 
-    // ✅ Pengecekan Grup Tanpa Membebani Server WA
+    // ? ✅ Pengecekan Grup Tanpa Membebani Server WA
     if (msg.from.includes('@g.us')) return;
 
     try {
@@ -141,7 +148,7 @@ client.on('message', async msg => {
         await msg.reply(text);
 
         const endTime = Date.now();
-        logResearchDataAsync(msg.body, text, endTime - startTime); // Jalankan di background
+        logResearchDataAsync(msg.body, text, endTime - startTime);
         console.log(`[BOT] Terkirim ke ${msg.from} (${endTime - startTime}ms)`);
 
     } catch (error) {

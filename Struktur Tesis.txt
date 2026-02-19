@@ -1,0 +1,396 @@
+Bab I Pendahuluan
+1.1 Latar Belakang Masalah
+1.2 Identifikasi Masalah (Research Problems)
+1.3 Rumusan Masalah (Research Questions)
+1.4 Tujuan Penelitian (Research Objectives)
+1.5 Manfaat Penelitian
+1.6 Korelasi RP –RQ -RO
+1.7 Kontribusi Penelitian
+1.8 Sistematika Penulisan
+
+
+Latar belakang masalah
+•Ikuti polalatar belakang masalah OMKKMasaSolTu,
+seperti yang ada di http://romisatriawahono.net/2012/06/18/kiat-
+menyusun-alur-latar-belakang-masalah-penelitian/
+
+• Jangan meletakkan sitasiuntuk referensi pada akhir
+paragraf(Berndtsson, 2009)
+
+• Satu pernyataan yang mensitasi kebanyak reference
+harus dilakukan dengan hati-hati
+
+• Kalimat dalam satu paragraf harus berisi satu pokok
+pikiran, dan bisa diletakkan di awal, tengah atau akhir
+paragraf
+
+•Antar paragraf harus dibuat mengalir(adakohesi),
+bersambungan, dengan alur cerita yang runut
+
+
+Pokok Pikiran dalam Paragraf?
+Decision Tree merupakan algoritma pengklasifikasian yang
+sering digunakan dan mempunyai struktur yang sederhana dan
+mudah untuk diinterpretasikan (Mantas & Abellán, 2014).
+Pohon yang terbentuk menyerupai pohon terbalik, dimana
+akar(root) berada di bagian paling atas dan daun(leaf) berada
+di bagian paling bawah. Decision Tree merupakan model
+klasifikasi yang berbentuk seperti pohon, dimana Decision Tree
+mudah untuk dimengerti meskipun oleh pengguna yang belum
+ahli sekalipun dan lebih efisien dalam menginduksi data (C.
+Sammut, 2011). Induksidi Decision Tree adalah salah satu
+teknik tertua dan yang paling tertua untuk model learning
+discriminatory, yang mana model tersebut telah dikembangkan
+secara mandiri di statistik dan di komunitas machine learning.
+Proses pembentukan Decision Tree dibagimen jadi 3 (T Warren
+Liao, 2007) yaitu, (1) pembentukan pohon(tree), (2) pruning,
+(3) mengekstrak aturan(rule) dari pohon keputusan yang
+terbentuk. Decision Tree baik digunakan untuk klasifikasi atau
+prediksi.
+
+Pokok Pikiran dalam Paragraf?
+Decision Tree telah diaplikasikan di bidang
+pengobatan(Setsirichoket al., 2012). Salah satu
+contoh nyaadalahpenerapanC4.5 yang digunakan
+untuk mengklasifikasikan karakteristik darah
+sehinggadapatmengklasifikasikan80 class kelainan
+thalassemia yang menyebardi Thailand. Ture, Tokatli,
+& Kurtjuga menggunakan Decision Tree untuk
+memprediksipasienkankerpayudara(Ture, Tokatli, &
+Kurt, 2009).
+
+
+Pokok Pikiran dalam Paragraf?
+Pengujiandan perbaikanbug software merupakan
+fasepengembangansoftwareyang paling mahal dan
+banyakmemakanwaktu. Lebihdari50% usaha dan
+biaya pengembangan softwaredigunakanuntuk
+pengujiandan perbaikanbug(Fakhrahmad& Sami,
+2009). Perbaikan bugakan semakin meningkat
+biayanya, apabila dilakukan di fase akhir
+pengembangan software. Strangiomenyatakan bahwa
+biayauntukmemperbaikibug akibatsalah analisis
+kebutuhansetelahfasepenerapan dapatmencapai
+100 kali lipat. Biayauntukmemperbaikibug pada
+tahapdesainsetelahpengirimanprodukmencapai60
+kali lipat. Sedangkanbiayauntukmemperbaikibug
+pada tahapdesainyang ditemukanolehpelanggan
+adalah20 kali lipat(Strangio, 2009).
+
+
+Latar belakang masalah
+•Masalahpenelitian yang kita angkat harus dilandasi
+denganpublikasipaperyang kuat(usahakan dari
+paper journal ber-impact factor tinggi, tidak dari
+conference procedings)
+•Harus dipahami bahwa tujuanlatarbelakangmasalah
+adalah memberi argumentasi bahwa masalah
+penelitian ygdiangkatadalahvalid
+•Tidak menggunakan kata “peneliti atau penulis”, tapi
+membuat kalimat jadi pasif, contoh:
+•Peneliti akan mencoba memecahkan masalah tersebut
+dengan metode A (X)
+•Pada penelitian ini, metode A akan diterapkan untuk
+memecahkan masalah tersebut (O)
+
+
+Contoh Sitasi Yang Salah
+Recent work has reported that the importance of
+computers in industry cannot be overestimated.
+Several useful services (such as booking train
+tickets) rely on computers. However,the
+importance of using computers in our everyday
+life has been questioned. It has beenargued that
+having too many computers in our everyday life
+causes security problems, sincepeople cannot
+protect their computers from hackers and
+Internet viruses. The researchersare still
+debating these hot topics(Jones, 1993).
+
+
+Contoh Sitasi Yang Sudah Diperbaiki
+Recent work has reported that the importance of
+computers in industry cannot be overestimated.
+Several useful services (such as booking train tickets)
+rely on computers(Bridge, 2010). However,the
+importance of using computers in our everyday life
+has been questioned. It has beenargued that having
+too many computers in our everyday life causes
+security problems(Jones, 1993), sincepeople cannot
+protect their computers from hackers and Internet
+viruses. The researchersare still debating these hot
+topics. So, we need new finding and research results
+on these topics.
+
+
+Contoh Sitasi keBanyakReference
+Recent work has reported that the importance of
+computers in industry cannot be overestimated.
+Several useful services (such as booking train tickets)
+rely on computers. However,the importance of using
+computers in our everyday life has been questioned.
+It has beenargued that having too many computers
+in our everyday life causes security problems, since
+people cannot protect their computers from hackers
+and Internet viruses. The researchersare still
+debating these hot topics(Jones, 1993)(Lessmann,
+2007) (Zhang, 2009). So, we need new finding and
+research results on these topics.
+
+
+Contoh Sitasi keBanyakReference
+Various types of classification algorithms have
+been applied for software defect prediction,
+including logistic regression (Denaro2000),
+decision trees (Khoshgoftaar& Seliya, 2002)
+(Khoshgoftaar& Gao, 2009), neural networks
+(Park et al. 2011) (Wang & Yu 2004) (Zheng
+2010), naive bayes(Menzieset al. 2007). This
+research is focused and concerned with the third
+approach.
+
+
+Alur Penulisan LatarBelakangMasalah*
+•Technical Paper:
+• Judul: Chinese Grain Production Forecasting Method
+Based on Particle Swarm Optimization-based Support
+Vector Machine
+•Author: Sheng-Wei Fei, Yu-Bin Miao and Cheng-Liang Liu
+• Publications: Recent Patents on Engineering 2009, 3, 8-12
+•Download:
+http://romisatriawahono.net/lecture/rm/paper/
+•Tugas Literature Review:
+1. Baca dan pahami paper di atas
+Tentukan latar belakang masalah, pernyataan masalah,
+2. pertanyaan penelitian, tujuanpenelitian, existing
+methods, kontribusipenelitian dan hasilpenelitian
+3. Rangkumkan dalam 7 slide
+
+
+Kiat Menyusun Latar Belakang Masalah*
+1.Latarbelakangmasalahpenelitianharus
+menjawabsemuapertanyaanMENGAPA(WHY)
+darijudulpenelitiankita. Bila judul penelitian:
+Penerapan ParticleSwarmOptimizationuntuk
+Pemilihan Parameter pada SupportVector
+Machineuntuk Prediksi Produksi Padi, maka latar
+1. mengapa padi?
+belakang
+ 2. mengapa
+ masalah
+ prediksi harus
+ produksi
+ bisa padi?
+ menjawab
+3. mengapa supportvectormachine?
+pertanyaan:
+4. mengapa particleswarmoptimization?
+
+
+Kiat Menyusun Latar Belakang Masalah
+2.Pola alur paragraf mengikuti OMKKMasaSolTu
+1.
+ obyek penelitian (O)
+2.
+ metode-metode yang ada (M)
+3.
+ kelebihan dan kelemahan metode yang ada (KK)
+4.
+ masalah pada metode yang dipilih (Masa)
+5.
+ solusi perbaikan metode (Sol)
+6.
+ rangkuman tujuan penelitian (Tu)
+
+
+Research Background
+1.Padi adalah komoditas yang penting di china,
+karena tingkat produksinya tinggi (FAO Report,
+2009) (1. mengapa padi?). Produksi padi perlu
+diprediksi dengan akurat, karena hasil prediksi yang
+akurat sangat penting untuk membuat kebijakan
+nasional (Traill, 2008) (2. mengapa prediksi
+produksi padi?).
+[1. obyek penelitian (O)]
+2.Metode prediksi rentet waktu seperti Support
+Vector Machine (SVM) (Yongsheng, 2008), Neural
+Network (NN) (Tseng, 2007) dan Grey Model (GM)
+(Wu, 2007) diusulkan oleh banyak peneliti (Huifei,
+2009) untuk prediksi produksi padi.
+[2. metode-metode yang ada]
+
+
+Research Background
+3.NN memiliki kelebihan pada prediksi nonlinear,
+kuat di parallel processing dan kemampuan untuk
+mentoleransi kesalahan, tapi memiliki kelemahan
+pada perlunya data training yang besar, over-
+fitting, lambatnya konvergensi, dan sifatnya yang
+local optimum (Rosario, 2007). GM punya
+kelebihan di tingginya akurasi prediksi meskipun
+menggunakan data yang sedikit, akan tetapi GM
+memiliki kelemahan pada prediksi data yang
+sifatnya naik turun secara fluktuatif seperti pada
+data produksi padi (Wu, 2007). [3. kelebihan dan
+kelemahan metode yang ada]
+
+
+
+Research Background
+4.5.6.SVM dapat memecahkan masalah NN dan GM, yaitu over-
+fitting, lambatnya konvergensi, dan sedikitnya data
+training (Vapnik, 2005), yang mana ini tepat untuk
+karakteristik data produksi padi pada penelitian ini (3.
+mengapa support vector machine?). Tetapi SVM memiliki
+kelemahan pada sulitnya pemilihan parameter SVM yang
+optimal (Coussement, 2008).
+[4. masalah pada metode yang dipilih]
+Particle Swarm Optimization (PSO) adalah metode
+optimisasi yang terbukti efektif digunakan untuk
+memecahkan masalah optimisasi multidimensi dan
+multiparameter pada pembelajaran pada machine
+learning seperti di NN, SVM, dan classifier lain (Brits,
+2009) (4. mengapa particle swarm optimization?).
+[5. solusi perbaikan metode]
+Pada penelitian ini PSO akan diterapkan untuk pemilihan
+parameter SVM yang sesuai dan optimal, sehingga hasil
+prediksi lebih akurat. [6. rangkuman tujuan penelitian]
+
+
+
+MasalahPenelitian(Research Problem)
+•Harus merangkumkansuatumasalahpenelitian
+dari uraian padalatarbelakangmasalah
+•Harus bahasa masalah
+•Menemukanmasalahbisadarifuture work peneliti
+lain ygadadi paper technical, biasanya diletakkan
+di dalam conclusion
+•Masalahjuga kadangbisaditemukandaripaper
+review, khususnyayang membahastentang
+problems atauchallenge padatopic penelitianitu
+
+
+
+MasalahPenelitian(Research Problem)
+SVM dapat memecahkan masalah NN dan
+GM, yaitu ‘over-fitting’, lambatnya
+konvergensi, dan sedikitnya data training,
+akan tetapi SVM memiliki kelemahan pada
+sulitnya pemilihan parameter SVM yang
+optimal sehinggamenyebabkantingkat
+akurasi prediksi menjadi rendah
+
+
+RumusanMasalah(Research Question)
+•Pertanyaan penelitian: how, how does, what.. But not
+“how to”
+• Pertanyaan penelitian menggantikan hipotesis
+•Gunakankalimattanyasepertibagaimana, seberapa
+efisien/akurat/cepat, dsb
+•Pertanyaan pada rumusanmasalahitu, akan dijawab
+oleh eksperimenpenelitian kita, dandirangkumkan
+secaralugas, jelasdi bagian kesimpulan
+•Jumlaheksperimendanhasilyang dilakukan(Bab Hasil
+danPembahasan), ditentukanolehjumlahresearch
+question (RQ) padapenelitiankita
+•Uraikandalambentukpoint-point apabilarumusan
+masalah lebih dari satu sehingga mudah dipahami
+
+
+RumusanMasalah(Research Question)
+Seberapa tinggi akurasimetode SVM apabila
+PSO diterapkan pada proses pemilihan
+parameter yang optimal?
+
+
+
+TujuanPenelitian(Research Objective)
+• Tujuanpada hakekatnya adalah judul, yang
+diuraikan dengan lebih detil atau spesifik
+• Harus memuatmetodedan tujuanbeserta
+pengukurannya(sinkron dengan masalah)
+• Uraikandalambentukpoint-point
+ apabilatujuan
+lebih dari satu sehingga mudah dipahami
+
+
+TujuanPenelitian(Research Objective)
+Menerapkan PSO untuk pemilihan parameter
+yang sesuai (C, gammadan epsilon) pada
+SupportVectorMachine(SVM), sehingga hasil
+prediksinya lebih akurat
+
+
+Manfaat Penelitian
+•Hal baikygdatangsetelahtujuanpenelitian
+tercapai, baikdarisisiteoritismaupun
+organisasi
+• Manfaat bukan mengulang-ulang tujuan
+•Uraikandalambentukpoint-point sehingga
+mudah dipahami
+
+
+Korelasi RP-RQ-RO
+
+RP, RQ, RO
+SVM dapat memecahkan
+masalah ‘over-fitting’
+lambatnya konvergensi dan sedikitnya data training,
+akan tetapi memiliki kelemahan pada sulitnya
+pemilihan parameter SVM
+yang sesuai, Seberapa meningkat akurasi
+metode SVM apabila PSO
+diterapkan pada proses
+pemilihan parameter?, Menerapkan PSO untuk
+pemilihan parameter yang  sesuai pada SVM (C, lambda dan epsilon) , sehingga hasil
+prediksinya lebih akurat.
+
+
+Pola Alur Alternatif (Pokok Pikiran Paragraf)
+untuk Penelitian Perbaikan Algoritma
+1. Definisi Algoritma
+2. Kelebihan Algoritma
+3. Kelemahan Algoritma
+4.Metode-Metodeyang ada untuk
+Memecahkan Kelemahan Algoritma
+5.Masalahpada Metode-Metodeyang ada
+(ResearchGap →Masalah Penelitian)
+6.Solusi pemecahan masalah pada metode-
+metode yang ada
+
+
+
+BAB II Landasan Teori
+2.1 Penelitian Terkait
+2.2 Landasan Teori
+2.3 Kerangka Pemikiran
+
+
+BAB III Metodologi Penelitian
+3.1 Desain Penelitian
+3.2 Pengumpulan Data
+3.3 Pengolahan Awal Data
+3.4 Metode yang Diusulkan
+3.5 Eksperimen dan Pengujian Metode
+3.6 Evaluasi dan Validasi Hasil
+
+BAB IV Hasil dan Pembahasan
+4.1 Hasil
+    4.1.1 Hasil Implementasi Sistem
+    4.1.2 Hasil Eksperimen
+    4.1.3 Hasil Pengujian
+
+4.2 Pembahasan
+    4.2.1 Analisis Hasil Eksperimen
+    4.2.2 Perbandingan dengan Penelitian Terdahulu
+    4.2.3 Evaluasi Kinerja Metode
+
+
+BAB V Kesimpulan dan Saran
+5.1 Kesimpulan
+5.2 Saran
+    5.2.1 Pengembangan Sistem Selanjutnya
+    5.2.2 Rekomendasi Penelitian Lanjutan
+
+Daftar Pustaka
+Lampiran
