@@ -56,7 +56,7 @@
         { "id": "SBN-006", "nama": "Pepsodent", "varian": "Tube Sedang (120gr)", "harga": 12000, "stok": 25 }
       ],
       "rokok": [
-        { "id": "ROK-005", "nama": "Signature", "varian": "12 Batang", "harga": 26999, "stok": 25 }
+        { "id": "ROK-005", "nama": "Signature", "varian": "12 Batang satu bungkus", "harga": 26999, "stok": 25 }
       ],
       "gas_dan_galon": [
         { "id": "GAS-001", "nama": "Gas LPG 3kg", "varian": "Tabung Melon (Isi Ulang)", "harga": 22000, "stok": 10 }

@@ -11,7 +11,7 @@ const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
 // Menggunakan model stabil "gemini-1.5-flash" (Cepat & Murah)
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-flash-lite-latest",
+    model: "gemini-2.0-flash",
     generationConfig: {
         temperature: 0.3,       
         maxOutputTokens: 1024,   
@@ -29,14 +29,22 @@ const model = genAI.getGenerativeModel({
 const LOG_FILE = 'data-penelitian.csv';
 
 const logResearchData = (question, answer, duration) => {
+    // 1. Menghitung ukuran Byte dari teks murni (utf8)
+    const bytesUser = Buffer.byteLength(question || '', 'utf8');
+    const bytesBot = Buffer.byteLength(answer || '', 'utf8');
+    
+    // 2. Mengubah Byte menjadi Kilobyte (KB) dengan 3 angka di belakang koma (contoh: 0.125)
+    const kbUser = (bytesUser / 1024).toFixed(3);
+    const kbBot = (bytesBot / 1024).toFixed(3);
+
     if (!fs.existsSync(LOG_FILE)) {
-        fs.writeFileSync(LOG_FILE, 'Timestamp,Pertanyaan,Jawaban,Waktu_Proses_ms\n');
+        fs.writeFileSync(LOG_FILE, 'Timestamp,Pertanyaan,Jawaban,Waktu_Proses_ms,Ukuran_Pesan_User_KB,Ukuran_Balasan_KB\n');
     }
     const cleanQ = question ? question.replace(/[\n,"]/g, ' ') : ''; 
     const cleanA = answer ? answer.replace(/[\n,"]/g, ' ') : '';
     const time = new Date().toISOString();
     
-    const row = `${time},"${cleanQ}","${cleanA}",${duration}\n`;
+    const row = `${time},"${cleanQ}","${cleanA}",${duration},${kbUser},${kbBot}\n`;
     fs.appendFileSync(LOG_FILE, row);
 };
 
@@ -96,8 +104,22 @@ PANDUAN CARA MERESPONS (Jadikan ini sebagai gaya bahasamu):
 
 ATURAN FORMAT WA (WAJIB DIIKUTI):
 - Selalu gunakan Enter/Baris Baru untuk memisahkan kalimat agar nyaman dibaca di layar HP. Jangan biarkan teks menumpuk jadi satu paragraf panjang!
-- Gunakan *Bintang* untuk menebalkan teks yang penting seperti Harga dan Nama Barang.
+
+- Gunakan *Bintang* untuk menebalkan teks yang penting seperti Harga dan Nama Barang dan gunakan list agar terlihat lebih rapi.
+
 - Gunakan emoji secukupnya agar tidak kaku.
+
+- DILARANG KERAS MENGULANGI SAPAAN! Jangan pernah mengucapkan "Halo, saya ABot..." berkali-kali. Sapaan perkenalan HANYA dipakai jika user mengetik sapaan pertama kali ("Halo", "P", "Assalamualaikum").
+
+- Jika user langsung tanya barang, LANGSUNG JAWAB STOKNYA tanpa embel-embel perkenalan diri.
+
+- Jika user mau beli/pesan (misal: "mau beli", "pesan 10", "gimana caranya"):
+
+   Jelaskan bahwa Toko HANYA melayani pembelian langsung (TIDAK BISA kirim/delivery). Suruh mereka datang ke toko di Jl. Sunan Gunungjati.
+- Jika user mengetik pesan singkat seperti "pesan 10", baca RIWAYAT CHAT untuk mengetahui barang apa yang sedang dibicarakan sebelumnya.
+
+- Jawab HANYA berdasarkan DATA JSON. Jika barang tidak ada, bilang kosong.
+
 `;
 
 
