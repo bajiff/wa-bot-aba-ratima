@@ -11,7 +11,7 @@ const { Client, LocalAuth } = pkg;
 const LOG_FILE = 'data-penelitian.csv';
 // ? Kode untuk membuat header kalau belum di buat headernya
 if (!fs.existsSync(LOG_FILE)) {
-    fs.writeFileSync(LOG_FILE, 'Timestamp,Pertanyaan,Jawaban,Waktu_Proses_ms,Ukuran_Pesan_User_KB,Ukuran_Balasan_KB\n');
+    fs.writeFileSync(LOG_FILE, 'Timestamp,Pertanyaan,Jawaban,Waktu_Proses_ms,Ukuran_Pesan_User_KB,Ukuran_Balasan_KB,\n');
 };
 
 const logResearchDataAsync = async (question, answer, duration) => {
